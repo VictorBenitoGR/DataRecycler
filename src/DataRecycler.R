@@ -272,7 +272,7 @@ unique(dataset$Version)
 # *** EXPORT *** --------------------------------------------------------------
 
 # The file will be exported to the project's "data" folder
-dataset <- head(dataset, 100000) # Consider GitHub file size limit (25MB)
+dataset <- head(dataset, 10000) # Consider GitHub file size limit (25MB)
 
 write.csv(dataset, "data/RecycledDataset.csv", row.names = FALSE)
 
