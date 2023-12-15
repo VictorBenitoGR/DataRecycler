@@ -1,7 +1,7 @@
-# * = = = = = = = = = = = = = = = = = = = = = =
+# * = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 # * DataRecycler
 # * https://github.com/VictorBenitoGR/DataRecycler
-# * = = = = = = = = = = = = = = = = = = = = = =
+# * = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 # *** PACKAGES *** ------------------------------------------------------------
 
@@ -27,7 +27,7 @@ getwd() # Change Working Directory with setwd("/path/to/DataCleaner") if needed
 
 dataset <- read.csv("data/dataset.csv") # Change according to your file name
 
-datasetTest <- head(dataset,100) # View without loading the entire db
+datasetTest <- head(dataset, 100) # View without loading the entire db
 
 str(dataset) # Quick overview of the general structure
 
@@ -58,7 +58,7 @@ colnames(dataset) <- c("ColumnName1", "ColumnName2", "ColumnName3",
 
 # * Verify if the class is POSIXct
 
-DateTimeColumns <- c('DateTimeUTC', 'DateTimeLocal') # Replace column names
+DateTimeColumns <- c("DateTimeUTC", "DateTimeLocal") # Replace column names
 
 VerifyPOSIXct <- lapply(dataset[DateTimeColumns], class)
 
@@ -76,7 +76,7 @@ convertToPOSIXct <- function(dataframe, columns) {
   return(dataframe)
 }
 
-dataset <- convertToPOSIXct(dataset, c('DateTimeUTC', 'DateTimeLocal'))
+dataset <- convertToPOSIXct(dataset, c("DateTimeUTC", "DateTimeLocal"))
 
 
 # *** DATES *** ---------------------------------------------------------------
@@ -85,17 +85,17 @@ dataset <- convertToPOSIXct(dataset, c('DateTimeUTC', 'DateTimeLocal'))
 # * and randomize the rest, or specify everything
 
 # The function allows us to randomize without losing the sequence of the data
-randomizeDateTime <- function(dataset, randomize = TRUE, 
+randomizeDateTime <- function(dataset, randomize = TRUE,
                               preferred_year = NULL,
                               preferred_month = NULL,
-                              preferred_day = NULL, 
+                              preferred_day = NULL,
                               preferred_hour = NULL,
                               preferred_minute = NULL,
                               preferred_second = NULL) {
-  
+
   # Sort by dates to maintain the sequence
   dataset <- dataset[order(dataset$DateTimeUTC), ]
-  
+
   if (randomize) {
     # ! Define your preferred range
     preferred_years <- seq(2014, 2016)  # ! Example
@@ -104,45 +104,45 @@ randomizeDateTime <- function(dataset, randomize = TRUE,
     preferred_hours <- seq(0, 23)
     preferred_minutes <- seq(0, 59)
     preferred_seconds <- seq(0, 59)
-    
+
     # Randomly select values from the preferred ranges if not specified
     random_year <- ifelse(is.null(preferred_year),
                           sample(preferred_years, 1), preferred_year)
-    
+
     random_month <- ifelse(is.null(preferred_month),
                            sample(preferred_months, 1), preferred_month)
-    
+
     random_day <- ifelse(is.null(preferred_day),
                          sample(preferred_days, 1), preferred_day)
-    
+
     random_hour <- ifelse(is.null(preferred_hour),
                           sample(preferred_hours, 1), preferred_hour)
     random_minute <- ifelse(is.null(preferred_minute),
                             sample(preferred_minutes, 1), preferred_minute)
-    
+
     random_second <- ifelse(is.null(preferred_second),
                             sample(preferred_seconds, 1), preferred_second)
   } else {
     # Use the specified values if randomization is not required
     random_year <- ifelse(is.null(preferred_year),
                           sample(preferred_years, 1), preferred_year)
-    
+
     random_month <- ifelse(is.null(preferred_month),
                            sample(preferred_months, 1), preferred_month)
-    
+
     random_day <- ifelse(is.null(preferred_day),
                          sample(preferred_days, 1), preferred_day)
-    
+
     random_hour <- ifelse(is.null(preferred_hour),
                           sample(preferred_hours, 1), preferred_hour)
-    
+
     random_minute <- ifelse(is.null(preferred_minute),
                             sample(preferred_minutes, 1), preferred_minute)
-    
+
     random_second <- ifelse(is.null(preferred_second),
                             sample(preferred_seconds, 1), preferred_second)
   }
-  
+
   # Calculate the differences
   year_difference <- random_year - year(dataset$DateTimeUTC[1])
   month_difference <- random_month - month(dataset$DateTimeUTC[1])
@@ -150,7 +150,7 @@ randomizeDateTime <- function(dataset, randomize = TRUE,
   hour_difference <- random_hour - hour(dataset$DateTimeUTC[1])
   minute_difference <- random_minute - minute(dataset$DateTimeUTC[1])
   second_difference <- random_second - second(dataset$DateTimeUTC[1])
-  
+
   # Apply the differences uniformly across all rows using make_datetime
   dataset <- dataset %>% mutate(DateTimeUTC =
                                   make_datetime(year(DateTimeUTC),
@@ -159,13 +159,13 @@ randomizeDateTime <- function(dataset, randomize = TRUE,
                                                 hour(DateTimeUTC),
                                                 minute(DateTimeUTC),
                                                 second(DateTimeUTC))
-                                + years(year_difference)
-                                + months(month_difference)
-                                + days(day_difference)
-                                + hours(hour_difference)
-                                + minutes(minute_difference)
-                                + seconds(second_difference))
-  
+                                  + years(year_difference)
+                                  + months(month_difference)
+                                  + days(day_difference)
+                                  + hours(hour_difference)
+                                  + minutes(minute_difference)
+                                  + seconds(second_difference))
+
   return(dataset)
 }
 
@@ -212,7 +212,7 @@ head(dataset$IDUser, 10)
 
 dataset$IDUser <- ave(dataset$IDUser, dataset$IDUser, FUN = function(x) {
   new_id <- paste0(sample(c(0:9, letters, LETTERS),
-                          19, replace = TRUE),collapse = "")
+                          19, replace = TRUE), collapse = "")
   sub("^.{19}", new_id, x)
 })
 

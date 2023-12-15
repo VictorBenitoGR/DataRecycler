@@ -119,13 +119,13 @@ randomizeDateTime <- function(dataset, randomize = TRUE,
                                                 hour(DateTimeUTC),
                                                 minute(DateTimeUTC),
                                                 second(DateTimeUTC))
-                                + years(year_difference)
-                                + months(month_difference)
-                                + days(day_difference)
-                                + hours(hour_difference)
-                                + minutes(minute_difference)
-                                + seconds(second_difference))
-  
+                                  + years(year_difference)
+                                  + months(month_difference)
+                                  + days(day_difference)
+                                  + hours(hour_difference)
+                                  + minutes(minute_difference)
+                                  + seconds(second_difference))
+
   return(dataset)
 }
 ```
